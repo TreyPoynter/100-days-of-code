@@ -9,7 +9,7 @@ load_dotenv()
 
 def get_db_connection():
     conn = psycopg2.connect(host='localhost',
-                            database='flaskdb',
+                            database=os.getenv('DB_NAME'),
                             user=os.getenv('DB_USERNAME'),
                             password=os.getenv('DB_PASSWORD'))
     return conn
