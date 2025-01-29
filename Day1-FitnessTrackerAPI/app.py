@@ -61,7 +61,7 @@ def view_progress():
    conn = get_db_connection()
    cur = conn.cursor()
 
-   cur.execute('SELECT date_added, SUM(caloriesBurnt) FROM exercises GROUP BY date_added;')
+   cur.execute('SELECT date_added, SUM(caloriesBurnt), SUM(durationInSeconds) FROM exercises GROUP BY date_added;')
 
    progress = cur.fetchall()
    cur.close()
