@@ -40,13 +40,17 @@ def add():
    conn = get_db_connection()
    cur = conn.cursor()
 
-   cur.execute('INSERT INTO exercises (name, durationInSeconds, caloriesBurnt)'
-               'VALUES (%s, %s, %s)',
-               (name, durationInSeconds, caloriesBurnt))
-   
-   conn.commit()
-   cur.close()
-   conn.close()
+   try:
+    cur.execute('INSERT INTO exercises (name, durationInSeconds, caloriesBurnt)'
+                'VALUES (%s, %s, %s)',
+                (name, durationInSeconds, caloriesBurnt))
+    conn.commit()
+   except psycopg2.DatabaseError as e:
+    conn.rollback()  # Roll back if there's an error
+    return {'msg': "Error adding exercise: {str(e)}"}
+   finally:
+    cur.close()
+    conn.close()
 
    return({
       'msg': f"Successfully added {name} exercise."
